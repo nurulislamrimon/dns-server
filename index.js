@@ -12,14 +12,15 @@ server.on("error", (err) => {
 // });
 
 const myDb = {
-  "expertsquad.net": "198.175.150.9",
-  "theqprint.com": "62.171.145.157",
+  "expertsquad.net": { type: "A", data: "198.175.150.9" },
+  "theqprint.com": { type: "A", data: "62.171.145.157:3000" },
+  "test.theqprint.com": { type: "CNAME", data: "theqprint.com" },
 };
 
 server.on("message", (message, rInfo) => {
   const incomingReq = dnsPacket.decode(message);
   const questions = incomingReq.questions;
-  const resolvedIP = myDb[questions?.[0]?.name];
+  const resolvedAddress = myDb[questions?.[0]?.name];
 
   const ans = dnsPacket.encode({
     type: "response",
@@ -28,17 +29,22 @@ server.on("message", (message, rInfo) => {
     questions: questions,
     answers: [
       {
-        type: "A",
+        type: resolvedAddress?.type,
         class: "IN",
         name: questions?.[0]?.name,
-        data: resolvedIP,
+        data: resolvedAddress?.data,
       },
     ],
   });
 
-  server.send(ans, rInfo.port, rInfo.address);
+  console.log(questions, rInfo, resolvedAddress, {
+    type: resolvedAddress?.type,
+    class: "IN",
+    name: questions?.[0]?.name,
+    data: resolvedAddress?.data,
+  }); // prints out a response from google dns
 
-  console.log(questions, rInfo, resolvedIP); // prints out a response from google dns
+  server.send(ans, rInfo.port, rInfo.address);
 });
 
 server.on("listening", () => {
