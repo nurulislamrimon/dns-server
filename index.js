@@ -51,6 +51,6 @@ server.on("listening", () => {
   console.log(`server listening ${address.address}:${address.port}`);
 });
 
-server.bind(53, () => {
-  console.log("DNS server is running on port : 53");
+server.bind(5353, () => {
+  console.log("DNS server is running on port : 5353");
 });
