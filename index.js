@@ -13,8 +13,7 @@ server.on("error", (err) => {
 
 const myDb = {
   "expertsquad.net": { type: "A", data: "198.175.150.9" },
-  "theqprint.com": { type: "A", data: "62.171.145.157:3000" },
-  "test.theqprint.com": { type: "CNAME", data: "theqprint.com" },
+  "male-powerboost.com": { type: "CNAME", data: "theqprint.com" },
 };
 
 server.on("message", (message, rInfo) => {
@@ -52,6 +51,6 @@ server.on("listening", () => {
   console.log(`server listening ${address.address}:${address.port}`);
 });
 
-server.bind(5353, () => {
-  console.log("DNS server is running on port : 5353");
+server.bind(53, () => {
+  console.log("DNS server is running on port : 53");
 });
